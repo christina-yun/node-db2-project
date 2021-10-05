@@ -49,15 +49,35 @@ router.post(
 //**[PUT] /api/cars/:id
 router.put(
   "/:id",
-  checkCarId,
+  checkCarId, checkCarPayload,
   checkVinNumberValid,
-  checkVinNumberUnique,
-  checkCarPayload,
-  (req, res, next) => {}
+  (req, res, next) => {
+      try{
+          Cars.updateById(req.params.id, req.body)
+            .then(updatedAccount => {
+                res.status(200).json(updatedAccount);
+            })
+            .catch(next)
+      }
+      catch(err){
+          next(err);
+      }
+  }
 );
 
 //**[DELETE] /api/cars/:id
-router.delete("/:id", checkCarId, (req, res, next) => {});
+router.delete("/:id", checkCarId, (req, res, next) => {
+    try{
+        Cars.deleteById(req.params.id)
+            .then(() => {
+                res.json(req.car);
+            })
+            .catch(next)
+    }
+    catch(err){
+        next(err);
+    }
+});
 
 //Error handling
 router.use((err, req, res, next) => {
