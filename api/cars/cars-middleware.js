@@ -1,5 +1,5 @@
 const Cars = require("./cars-model");
-const vinValidator = require('vin-validator');
+const vinValidator = require("vin-validator");
 
 const checkCarId = async (req, res, next) => {
   try {
@@ -20,56 +20,53 @@ const checkCarId = async (req, res, next) => {
 };
 
 const checkCarPayload = (req, res, next) => {
-  try{
+  try {
     const payload = req.body;
-    
-    if(!payload.vin){
-      next({ status: 400, message: `vin is missing`});
-    } else if(!payload.make){
-      next({ status: 400, message: `make is missing`});
-    } else if(!payload.model){
-      next({ status: 400, message: `model is missing`});
-    } else if(!payload.mileage){
-      next({ status: 400, message: `mileage is missing`});
+
+    if (!payload.vin) {
+      next({ status: 400, message: `vin is missing` });
+    } else if (!payload.make) {
+      next({ status: 400, message: `make is missing` });
+    } else if (!payload.model) {
+      next({ status: 400, message: `model is missing` });
+    } else if (!payload.mileage) {
+      next({ status: 400, message: `mileage is missing` });
     } else {
       req.payload = payload;
       next();
     }
-  }
-  catch(err){
+  } catch (err) {
     next(err);
   }
 };
 
 const checkVinNumberValid = (req, res, next) => {
-  try{
+  try {
     const validVin = vinValidator.validate(req.body.vin);
 
-    if(!validVin){
-      next({ status: 400, message: `vin ${req.body.vin} is invalid`})
+    if (!validVin) {
+      next({ status: 400, message: `vin ${req.body.vin} is invalid` });
     } else {
       next();
     }
-  }
-  catch(err){
+  } catch (err) {
     next(err);
   }
 };
 
 const checkVinNumberUnique = async (req, res, next) => {
-  try{
+  try {
     const carVinNumsArray = await Cars.getAll();
-    const carVinNumMatch = carVinNumsArray.filter(car => {
+    const carVinNumMatch = carVinNumsArray.filter((car) => {
       return car.vin === req.body.vin;
     });
 
-    if(carVinNumMatch.length > 0){
-      next({ status: 400, message: `vin ${req.body.vin} already exists`})
+    if (carVinNumMatch.length > 0) {
+      next({ status: 400, message: `vin ${req.body.vin} already exists` });
     } else {
       next();
     }
-  }
-  catch(err){
+  } catch (err) {
     next(err);
   }
 };

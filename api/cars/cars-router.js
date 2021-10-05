@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
 //[GET] /api/cars/:id
 router.get("/:id", checkCarId, async (req, res, next) => {
   try {
-      res.status(200).json(req.car);
+    res.status(200).json(req.car);
   } catch (err) {
     next(err);
   }
@@ -31,15 +31,16 @@ router.get("/:id", checkCarId, async (req, res, next) => {
 //[POST] /api/cars
 router.post(
   "/",
-  checkCarPayload, checkVinNumberValid,
+  checkCarPayload,
+  checkVinNumberValid,
   checkVinNumberUnique,
   async (req, res, next) => {
     try {
-        Cars.create(req.body)
-            .then(newAccount => {
-                res.status(201).json(newAccount);
-            })
-            .catch(next)
+      Cars.create(req.body)
+        .then((newAccount) => {
+          res.status(201).json(newAccount);
+        })
+        .catch(next);
     } catch (err) {
       next(err);
     }
@@ -49,34 +50,33 @@ router.post(
 //**[PUT] /api/cars/:id
 router.put(
   "/:id",
-  checkCarId, checkCarPayload,
+  checkCarId,
+  checkCarPayload,
   checkVinNumberValid,
   (req, res, next) => {
-      try{
-          Cars.updateById(req.params.id, req.body)
-            .then(updatedAccount => {
-                res.status(200).json(updatedAccount);
-            })
-            .catch(next)
-      }
-      catch(err){
-          next(err);
-      }
+    try {
+      Cars.updateById(req.params.id, req.body)
+        .then((updatedAccount) => {
+          res.status(200).json(updatedAccount);
+        })
+        .catch(next);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
 //**[DELETE] /api/cars/:id
 router.delete("/:id", checkCarId, (req, res, next) => {
-    try{
-        Cars.deleteById(req.params.id)
-            .then(() => {
-                res.json(req.car);
-            })
-            .catch(next)
-    }
-    catch(err){
-        next(err);
-    }
+  try {
+    Cars.deleteById(req.params.id)
+      .then(() => {
+        res.json(req.car);
+      })
+      .catch(next);
+  } catch (err) {
+    next(err);
+  }
 });
 
 //Error handling
