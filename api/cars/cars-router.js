@@ -31,9 +31,8 @@ router.get("/:id", checkCarId, async (req, res, next) => {
 //[POST] /api/cars
 router.post(
   "/",
-  checkVinNumberValid,
+  checkCarPayload, checkVinNumberValid,
   checkVinNumberUnique,
-  checkCarPayload,
   async (req, res, next) => {
     try {
         Cars.create(req.body)
